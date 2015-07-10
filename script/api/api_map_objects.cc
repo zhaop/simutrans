@@ -255,6 +255,28 @@ vector_tpl<convoihandle_t> const& depot_get_convoy_list(depot_t *depot)
 }
 
 
+weg_t* build_way(const char* default_param, koord pos, koord pos2, player_t* player)
+{
+	if (player == NULL) {
+		return NULL;
+	}
+	tool_build_way_t w;
+	cbuffer_t buf;
+	buf.printf("%s", default_param);
+	w.set_default_param(buf);
+	w.init(player);
+	const char* err = w.work(player, koord3d(pos, 0));
+	if (err) {
+		return NULL;
+	}
+	const char* err2 = w.work(player, koord3d(pos2, 0));
+	if (err2) {
+		return NULL;
+	}
+	grund_t *gr = welt->lookup_kartenboden(pos);
+	return gr->find<weg_t>();
+}
+
 void export_map_objects(HSQUIRRELVM vm)
 {
 	/**
@@ -416,6 +438,14 @@ void export_map_objects(HSQUIRRELVM vm)
 	 * @returns object descriptor.
 	 */
 	register_method(vm, &weg_t::get_besch, "get_desc");
+	/**
+	 * Create a new way object
+	 * @param pos  position
+	 * @param pl   owner
+	 * @returns way_x instance or null if creation failed
+	 * @warning I dunno if this can be used in network games
+	 */
+	STATIC register_method(vm, &build_way, "build", false, true);
 	end_class(vm);
 
 

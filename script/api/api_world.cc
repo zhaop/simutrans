@@ -6,6 +6,7 @@
 #include "get_next.h"
 #include "../api_class.h"
 #include "../api_function.h"
+#include "../../simmenu.h"
 #include "../../simworld.h"
 #include "../../player/simplay.h"
 #include "../../obj/gebaeude.h"
@@ -95,6 +96,27 @@ SQInteger world_get_convoy_list(HSQUIRRELVM vm)
 	push_instance(vm, "convoy_list_x");
 	set_slot<bool>(vm, "use_world", true);
 	return 1;
+}
+
+
+bool world_init_general_tool(player_t* pl, int tool, const char* param)
+{
+	const char *old_param = tool_t::general_tool[tool]->get_default_param();
+	tool_t::general_tool[tool]->set_default_param(param);
+	bool ok = tool_t::general_tool[tool]->init( pl );
+	tool_t::general_tool[tool]->set_default_param(old_param);
+	return ok;
+}
+
+bool world_call_general_tool(player_t* pl, int tool, koord k, const char* param)
+{
+	grund_t *gr = welt->lookup_kartenboden(k);
+	koord3d pos = gr ? gr->get_pos() : koord3d::invalid;
+	const char *old_param = tool_t::general_tool[tool]->get_default_param();
+	tool_t::general_tool[tool]->set_default_param(param);
+	const char * err = tool_t::general_tool[tool]->work( pl, pos );
+	tool_t::general_tool[tool]->set_default_param(old_param);
+	return (err == 0);
 }
 
 
@@ -284,6 +306,24 @@ void export_world(HSQUIRRELVM vm)
 	 * @typemask convoy_list_x()
 	 */
 	STATIC register_function(vm, world_get_convoy_list, "get_convoy_list", 1, ".");
+
+	/**
+	 * Initialize a general tool with params
+	 * @param player_x pl
+	 * @param int tool
+	 * @param string param
+	 * @returns whether tool was correctly initialized
+	 */
+	STATIC register_method(vm, &world_init_general_tool, "init_general_tool", false, true);
+
+	/**
+	 * Use a general tool
+	 * @param player_x pl
+	 * @param coord pos
+	 * @param string param
+	 * @returns whether tool call was successful
+	 */
+	STATIC register_method(vm, &world_call_general_tool, "call_general_tool", false, true);
 
 	end_class(vm);
 

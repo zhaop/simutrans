@@ -5,6 +5,7 @@
 #include "../squirrel/sqstdaux.h" // for error handlers
 #include "../squirrel/sqstdio.h" // for loadfile
 #include "../squirrel/sqstdstring.h" // export for scripts
+#include "../squirrel/sqstdmath.h" // export for scripts
 #include "../squirrel/sq_extensions.h" // for sq_call_restricted
 
 #include "../utils/log.h"
@@ -88,6 +89,7 @@ script_vm_t::script_vm_t(const char* include_path_)
 	// register libraries
 	sq_pushroottable(vm);
 	sqstd_register_stringlib(vm);
+	sqstd_register_mathlib(vm);
 	sq_pop(vm, 1);
 	// export include command
 	export_include(vm, include_path);
