@@ -630,6 +630,25 @@ namespace script_api {
 		typedef void(*sig_reduced)(A2,A3,A4,A5) ; // signature of function with without return type, class, and last parameter
 	};
 
+	template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5>
+	struct embed_call_t<R (*)(A1, A2, A3, A4, A5)> {
+		static SQInteger call_function(HSQUIRRELVM vm, R (*func)(A1, A2, A3, A4, A5), bool discard_first)
+		{
+			return param<R>::push(vm, (*func)(
+				param<A1>::get(vm, 2-discard_first),
+							  param<A2>::get(vm, 3-discard_first),
+							  param<A3>::get(vm, 4-discard_first),
+							  param<A4>::get(vm, 5-discard_first),
+							  param<A5>::get(vm, 6-discard_first)
+			) );
+		}
+
+		typedef R              sig_return;  // return type
+		typedef void_t         sig_class;   // type of class
+		typedef A1             sig_first;   // type of first parameter
+		typedef void(*sig_reduced)(A2,A3,A4,A5) ; // signature of function with without return type, class, and last parameter
+	};
+
 	template<class C, typename A1, typename A2, typename A3, typename A4, typename A5>
 	struct embed_call_t<void (C::*)(A1, A2, A3, A4, A5)> {
 		static SQInteger call_function(HSQUIRRELVM vm, void (C::*func)(A1, A2, A3, A4, A5), bool)
@@ -656,6 +675,26 @@ namespace script_api {
 	};
 
 	// 6 parameters
+	template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
+	struct embed_call_t<R (*)(A1, A2, A3, A4, A5, A6)> {
+		static SQInteger call_function(HSQUIRRELVM vm, R (*func)(A1, A2, A3, A4, A5, A6), bool discard_first)
+		{
+			return param<R>::push(vm, (*func)(
+				param<A1>::get(vm, 2-discard_first),
+							  param<A2>::get(vm, 3-discard_first),
+							  param<A3>::get(vm, 4-discard_first),
+							  param<A4>::get(vm, 5-discard_first),
+							  param<A5>::get(vm, 6-discard_first),
+							  param<A6>::get(vm, 7-discard_first)
+			) );
+		}
+
+		typedef R              sig_return;  // return type
+		typedef void_t         sig_class;   // type of class
+		typedef A1             sig_first;   // type of first parameter
+		typedef void(*sig_reduced)(A2,A3,A4,A5,A6) ; // signature of function with without return type, class, and last parameter
+	};
+
 	template<class C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
 	struct embed_call_t<void (C::*)(A1, A2, A3, A4, A5, A6)> {
 		static SQInteger call_function(HSQUIRRELVM vm, void (C::*func)(A1, A2, A3, A4, A5, A6), bool)
@@ -680,6 +719,28 @@ namespace script_api {
 		typedef C*                      sig_class;   // type of class
 		typedef A1                      sig_first;   // type of first parameter
 		typedef void(*sig_reduced)(A2,A3,A4,A5,A6) ; // signature of function with without return type, class, and last parameter
+	};
+
+	// 7 parameters
+	template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
+	struct embed_call_t<R (*)(A1, A2, A3, A4, A5, A6, A7)> {
+		static SQInteger call_function(HSQUIRRELVM vm, R (*func)(A1, A2, A3, A4, A5, A6, A7), bool discard_first)
+		{
+			return param<R>::push(vm, (*func)(
+				param<A1>::get(vm, 2-discard_first),
+							  param<A2>::get(vm, 3-discard_first),
+							  param<A3>::get(vm, 4-discard_first),
+							  param<A4>::get(vm, 5-discard_first),
+							  param<A5>::get(vm, 6-discard_first),
+							  param<A6>::get(vm, 7-discard_first),
+							  param<A7>::get(vm, 8-discard_first)
+			) );
+		}
+
+		typedef R              sig_return;  // return type
+		typedef void_t         sig_class;   // type of class
+		typedef A1             sig_first;   // type of first parameter
+		typedef void(*sig_reduced)(A2,A3,A4,A5,A6,A7) ; // signature of function with without return type, class, and last parameter
 	};
 
 

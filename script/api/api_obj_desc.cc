@@ -9,8 +9,10 @@
 #include "../api_class.h"
 #include "../api_function.h"
 #include "../../besch/haus_besch.h"
+#include "../../besch/vehikel_besch.h"
 #include "../../besch/ware_besch.h"
 #include "../../bauer/hausbauer.h"
+#include "../../bauer/vehikelbauer.h"
 #include "../../bauer/wegbauer.h"
 #include "../../bauer/warenbauer.h"
 #include "../../simworld.h"
@@ -301,6 +303,61 @@ void export_goods_desc(HSQUIRRELVM vm)
 	 * Returns best way for a given speed limit
 	 */
 	STATIC register_method(vm, &wegbauer_t::weg_search, "search", false, true);
+
+	end_class(vm);
+
+	/**
+	 * Object descriptor for vehicles.
+	 */
+	begin_besch_class(vm, "vehicle_desc_x", "obj_desc_transport_x", (GETBESCHFUNC)param<const vehikel_besch_t*>::getfunc());
+	/**
+	 * @returns whether this vehicle can be placed before the given one
+	 */
+	register_method(vm, &vehikel_besch_t::can_lead, "can_lead");
+	/**
+	 * @returns whether this vehicle can be placed after the given one
+	 */
+	register_method(vm, &vehikel_besch_t::can_follow, "can_follow");
+	/**
+	 * @returns a descriptor of the good it can carry
+	 */
+	register_method(vm, &vehikel_besch_t::get_ware, "get_good");
+	/**
+	 * @returns how much goods it can carry when full
+	 */
+	register_method(vm, &vehikel_besch_t::get_zuladung, "get_capacity");
+	/**
+	 * @returns how long it takes (in ms) to fully load/unload
+	 */
+	register_method(vm, &vehikel_besch_t::get_loading_time, "get_loading_time");
+	/**
+	 * @returns how heavy the vehicle weighs
+	 */
+	register_method(vm, &vehikel_besch_t::get_gewicht, "get_weight");
+	/**
+	 * @returns how much power its engine provides
+	 */
+	register_method(vm, &vehikel_besch_t::get_leistung, "get_power");
+	/**
+	 * @returns how much it costs to run every km
+	 */
+	register_method(vm, &vehikel_besch_t::get_betriebskosten, "get_running_cost");
+	/**
+	 * @returns its gear value
+	 */
+	register_method(vm, &vehikel_besch_t::get_gear, "get_gear");
+	/**
+	 * @returns the type of its engine (electric engines require an electrified way)
+	 */
+	// register_method(vm, &vehikel_besch_t::get_engine_type, "get_engine_type");
+	/**
+	 * @returns the length of the vehicle in 1/8 of normal len
+	 */
+	register_method(vm, &vehikel_besch_t::get_length, "get_length");
+	/**
+	 * @returns descriptor of vehicle that best matches search criteria
+	 */
+	STATIC register_method(vm, &vehikelbauer_t::vehikel_search, "search", false, true);
 
 	end_class(vm);
 
