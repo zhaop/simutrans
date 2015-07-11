@@ -133,6 +133,15 @@ namespace script_api {
 		return param<sint16>::push(vm, v);
 	}
 
+	weg_t::system_type param<weg_t::system_type>::get(HSQUIRRELVM vm, SQInteger index)
+	{
+		return (weg_t::system_type)(param<sint16>::get(vm, index));
+	}
+	SQInteger param<weg_t::system_type>::push(HSQUIRRELVM vm, weg_t::system_type const& v)
+	{
+		return param<sint16>::push(vm, v);
+	}
+
 
 	obj_t::typ param<obj_t::typ>::get(HSQUIRRELVM vm, SQInteger index)
 	{

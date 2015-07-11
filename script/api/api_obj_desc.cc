@@ -11,6 +11,7 @@
 #include "../../besch/haus_besch.h"
 #include "../../besch/ware_besch.h"
 #include "../../bauer/hausbauer.h"
+#include "../../bauer/wegbauer.h"
 #include "../../bauer/warenbauer.h"
 #include "../../simworld.h"
 
@@ -296,6 +297,10 @@ void export_goods_desc(HSQUIRRELVM vm)
 	 * @returns system type of the way, see @ref way_system_types.
 	 */
 	register_method(vm, &weg_besch_t::get_styp, "get_system_type");
+	/**
+	 * Returns best way for a given speed limit
+	 */
+	STATIC register_method(vm, &wegbauer_t::weg_search, "search", false, true);
 
 	end_class(vm);
 
