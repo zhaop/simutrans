@@ -42,6 +42,9 @@ public:
 	static const vehikel_besch_t * get_info(const char *name);
 	static slist_tpl<vehikel_besch_t const*> const& get_info(waytype_t);
 
+	static uint8 get_vehikel_anzahl(waytype_t);
+	static const vehikel_besch_t *get_by_index(waytype_t, uint32);
+
 	/* extended search for vehicles for KI
 	* @author prissi
 	*/

@@ -42,6 +42,36 @@ SQInteger get_ware_besch_index(HSQUIRRELVM vm)
 	return push_instance(vm, "good_desc_x",  name);
 }
 
+SQInteger get_next_vehicle_desc(HSQUIRRELVM vm)
+{
+	sq_pushstring(vm, "wt", -1);
+	if (!SQ_SUCCEEDED(sq_get(vm, -3))) {	// vehicle_desc_list_x instance is at -3
+		return SQ_ERROR;
+	}
+	waytype_t wt = param<waytype_t>::get(vm, -1);
+	sq_pop(vm, 1);	// Restore stack to previous state
+	
+	return generic_get_next(vm, vehikelbauer_t::get_vehikel_anzahl(wt));
+}
+
+SQInteger get_vehicle_desc_index(HSQUIRRELVM vm)
+{
+	uint32 index = param<uint32>::get(vm, -1);
+
+	sq_pushstring(vm, "wt", -1);
+	if (!SQ_SUCCEEDED(sq_get(vm, -3))) {	// vehicle_desc_list_x instance is at -3
+		return SQ_ERROR;
+	}
+	waytype_t wt = param<waytype_t>::get(vm, -1);
+	sq_pop(vm, 1);	// Restore stack to previous state
+	
+	const char* name = "None";
+	if (index < vehikelbauer_t::get_vehikel_anzahl(wt)) {
+		name = vehikelbauer_t::get_by_index(wt, index)->get_name();
+	}
+	return push_instance(vm, "vehicle_desc_x", name);
+}
+
 
 bool are_equal(const obj_besch_std_name_t* a, const obj_besch_std_name_t* b)
 {
@@ -358,6 +388,30 @@ void export_goods_desc(HSQUIRRELVM vm)
 	 * @returns descriptor of vehicle that best matches search criteria
 	 */
 	STATIC register_method(vm, &vehikelbauer_t::vehikel_search, "search", false, true);
+
+	end_class(vm);
+
+	/**
+	 * Implements iterator to iterate through lists of vehicle types.
+	 *
+	 * Usage:
+	 * @code
+	 * local list = vehicle_desc_list_x(wt_road)
+	 * foreach(vehicle_desc in list) {
+	 *     ... // vehicle_desc is an instance of the vehicle_desc_x class
+	 * }
+	 * @endcode
+	 */
+	begin_class(vm, "vehicle_desc_list_x", 0);
+	/**
+	 * Meta-method to be used in foreach loops. Do not call them directly.
+	 */
+	register_function(vm, &get_next_vehicle_desc,	"_nexti", 2, "x o|i");
+	/**
+	 * Meta-method to be used in foreach loops. Do not call them directly.
+	 * @typemask vehicle_desc_x()
+	 */
+	register_function(vm, &get_vehicle_desc_index,	"_get",   2, "xi");
 
 	end_class(vm);
 

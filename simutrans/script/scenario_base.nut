@@ -444,6 +444,17 @@ class line_list_x {
 }
 
 /**
+ * class to provide access to vehicle description lists
+ */
+class vehicle_desc_list_x {
+	wt = 0
+
+	constructor(wt_) {
+		wt = wt_
+	}
+}
+
+/**
  * class that contains data to get access to a tile (grund_t)
  */
 class tile_x extends extend_get {

@@ -285,6 +285,16 @@ slist_tpl<vehikel_besch_t const*> const & vehikelbauer_t::get_info(waytype_t con
 	return typ_fahrzeuge[GET_WAYTYPE_INDEX(typ)];
 }
 
+uint8 vehikelbauer_t::get_vehikel_anzahl(waytype_t wt)
+{
+	return typ_fahrzeuge[GET_WAYTYPE_INDEX(wt)].get_count();
+}
+
+const vehikel_besch_t *vehikelbauer_t::get_by_index(waytype_t wt, uint32 index)
+{
+	return typ_fahrzeuge[GET_WAYTYPE_INDEX(wt)].at(index);
+}
+
 
 /* extended search for vehicles for KI *
  * checks also timeline and constraints
